@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.security import hash_password
 from app.db.database import get_db
 from app.db.models.admin import Admin
@@ -11,6 +12,12 @@ router = APIRouter(prefix="/admin/setup", tags=["Admin Setup"])
 
 @router.post("/", response_model=AdminResponse, status_code=status.HTTP_201_CREATED)
 def create_admin(admin: AdminCreate, db: Session = Depends(get_db)):
+    if settings.environment != "development":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin setup is disabled outside development"
+        )
+
     existing_admin = db.query(Admin).filter(Admin.email == admin.email).first()
 
     if existing_admin:
