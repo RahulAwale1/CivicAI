@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.routes.admin_documents import router as admin_documents_router
 from app.api.routes.admin_me import router as admin_me_router
 from app.api.routes.admin_setup import router as admin_setup_router
 from app.api.routes.auth import router as auth_router
@@ -18,6 +19,7 @@ app.include_router(cities_router)
 app.include_router(admin_setup_router)
 app.include_router(auth_router)
 app.include_router(admin_me_router)
+app.include_router(admin_documents_router)
 
 
 @app.get("/")
