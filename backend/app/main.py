@@ -6,6 +6,7 @@ from app.api.routes.admin_me import router as admin_me_router
 from app.api.routes.admin_processing import router as admin_processing_router
 from app.api.routes.admin_setup import router as admin_setup_router
 from app.api.routes.auth import router as auth_router
+from app.api.routes.chat import router as chat_router
 from app.api.routes.cities import router as cities_router
 from app.api.routes.health import router as health_router
 from app.core.config import settings
@@ -24,6 +25,7 @@ app.include_router(admin_me_router)
 app.include_router(admin_documents_router)
 app.include_router(admin_jobs_router)
 app.include_router(admin_processing_router)
+app.include_router(chat_router)
 
 
 @app.get("/")
