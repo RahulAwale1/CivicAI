@@ -1,7 +1,9 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from pgvector.sqlalchemy import VECTOR
 
+from app.core.config import settings
 from app.db.database import Base
 
 
@@ -14,6 +16,7 @@ class Chunk(Base):
     page_number = Column(Integer, nullable=True)
     chunk_index = Column(Integer, nullable=False)
     text = Column(Text, nullable=False)
+    embedding = Column(VECTOR(settings.embedding_dimension), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     document = relationship("Document", back_populates="chunks")

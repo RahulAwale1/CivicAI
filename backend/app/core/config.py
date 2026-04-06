@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     aws_region: str
     s3_bucket_name: str
 
+    openai_api_key: str
+    openai_embedding_model: str = "text-embedding-3-small"
+    embedding_dimension: int = 1536
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8"

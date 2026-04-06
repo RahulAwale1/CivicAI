@@ -9,6 +9,7 @@ from app.db.models.document import Document
 from app.db.models.enums import DocumentStatus, JobStatus
 from app.db.models.job import ProcessingJob
 from app.services.chunking_service import chunk_text
+from app.services.embedding_service import get_text_embedding
 from app.services.s3_service import s3_service
 
 
@@ -42,7 +43,6 @@ def process_job(job_id: int, db: Session) -> ProcessingJob:
         db.commit()
 
         pdf_bytes = s3_service.download_file_bytes(document.s3_key)
-
         page_texts = extract_text_by_page(pdf_bytes)
 
         db.query(Chunk).filter(Chunk.document_id == document.id).delete()
@@ -52,12 +52,15 @@ def process_job(job_id: int, db: Session) -> ProcessingJob:
             chunks = chunk_text(page_text)
 
             for idx, chunk in enumerate(chunks):
+                embedding = get_text_embedding(chunk)
+
                 db_chunk = Chunk(
                     document_id=document.id,
                     city_id=document.city_id,
                     page_number=page_number,
                     chunk_index=idx,
                     text=chunk,
+                    embedding=embedding,
                 )
                 db.add(db_chunk)
 
