@@ -4,12 +4,14 @@ from datetime import datetime, timezone
 from pypdf import PdfReader
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.db.models.chunk import Chunk
 from app.db.models.document import Document
 from app.db.models.enums import DocumentStatus, JobStatus
 from app.db.models.job import ProcessingJob
 from app.services.chunking_service import chunk_text
 from app.services.embedding_service import get_text_embedding
+from app.services.ocr_service import extract_text_with_ocr, should_use_ocr
 from app.services.s3_service import s3_service
 
 
@@ -27,23 +29,28 @@ def extract_text_by_page(pdf_bytes: bytes) -> list[tuple[int, str]]:
 
 def process_job(job_id: int, db: Session) -> ProcessingJob:
     job = db.query(ProcessingJob).filter(ProcessingJob.id == job_id).first()
-
     if not job:
         raise ValueError(f"Job {job_id} not found")
 
     document = db.query(Document).filter(Document.id == job.document_id).first()
-
     if not document:
         raise ValueError(f"Document {job.document_id} not found")
 
     try:
+        if document.status == DocumentStatus.processed:
+            return job
+
         job.status = JobStatus.running
         job.started_at = datetime.now(timezone.utc)
         document.status = DocumentStatus.processing
         db.commit()
 
         pdf_bytes = s3_service.download_file_bytes(document.s3_key)
+
         page_texts = extract_text_by_page(pdf_bytes)
+
+        if settings.ocr_enabled and should_use_ocr(page_texts):
+            page_texts = extract_text_with_ocr(pdf_bytes)
 
         db.query(Chunk).filter(Chunk.document_id == document.id).delete()
         db.commit()
@@ -70,14 +77,12 @@ def process_job(job_id: int, db: Session) -> ProcessingJob:
 
         db.commit()
         db.refresh(job)
-
         return job
 
     except Exception as e:
         db.rollback()
 
         job = db.query(ProcessingJob).filter(ProcessingJob.id == job_id).first()
-
         if job:
             job.status = JobStatus.failed
             job.error_message = str(e)
@@ -89,5 +94,4 @@ def process_job(job_id: int, db: Session) -> ProcessingJob:
 
         db.commit()
         db.refresh(job)
-
         return job
