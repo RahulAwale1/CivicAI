@@ -1,8 +1,8 @@
+import io
 import os
 import uuid
 
 import boto3
-from botocore.exceptions import BotoCoreError, ClientError
 
 from app.core.config import settings
 
@@ -37,6 +37,12 @@ class S3Service:
         )
 
         return s3_key
+
+    def download_file_bytes(self, s3_key: str) -> bytes:
+        buffer = io.BytesIO()
+        self.client.download_fileobj(self.bucket_name, s3_key, buffer)
+        buffer.seek(0)
+        return buffer.read()
 
 
 s3_service = S3Service()
