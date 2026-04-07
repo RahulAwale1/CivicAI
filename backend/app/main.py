@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.admin_documents import router as admin_documents_router
 from app.api.routes.admin_jobs import router as admin_jobs_router
@@ -16,6 +17,17 @@ from app.db.models import Admin, City, Chunk, Document, ProcessingJob  # noqa: F
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(health_router)
 app.include_router(cities_router)
