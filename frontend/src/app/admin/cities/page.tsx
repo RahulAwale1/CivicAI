@@ -7,6 +7,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import CityForm from "@/components/admin/CityForm";
 import CityTable from "@/components/admin/CityTable";
 import Loader from "@/components/common/Loader";
+import toast from "react-hot-toast";
 import {
   createCity,
   deactivateCity,
@@ -40,7 +41,7 @@ export default function AdminCitiesPage() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to load cities";
-      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -65,12 +66,12 @@ export default function AdminCitiesPage() {
       setSuccess("");
 
       await createCity(token, values);
-      setSuccess("City created successfully.");
+      toast.success("City created successfully.");
       await loadCities();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to create city";
-      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -91,13 +92,13 @@ export default function AdminCitiesPage() {
       setSuccess("");
 
       await updateCity(token, editingCity.id, values);
-      setSuccess("City updated successfully.");
+      toast.success("City updated successfully.");
       setEditingCity(null);
       await loadCities();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to update city";
-      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -118,12 +119,12 @@ export default function AdminCitiesPage() {
       setSuccess("");
 
       await deactivateCity(token, city.id);
-      setSuccess("City deactivated successfully.");
+      toast.success("City deactivated successfully.");
       await loadCities();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to deactivate city";
-      setError(message);
+      toast.error(message);
     }
   }
 

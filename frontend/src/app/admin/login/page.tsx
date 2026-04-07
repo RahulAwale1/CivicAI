@@ -7,6 +7,7 @@ import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import { loginAdmin } from "@/lib/api";
 import { getAdminToken, setAdminToken } from "@/lib/auth";
+import toast from "react-hot-toast";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function AdminLoginPage() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Login failed";
-      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

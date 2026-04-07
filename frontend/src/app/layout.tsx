@@ -1,19 +1,19 @@
-import "./globals.css";
-import type { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "CivicAI",
-  description: "AI-powered municipal by-law assistant",
-};
+import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster position="top-right" />
+      </body>
     </html>
   );
 }

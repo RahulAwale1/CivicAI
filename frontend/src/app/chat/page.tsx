@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import PageTitle from "@/components/common/PageTitle";
 import Loader from "@/components/common/Loader";
 import EmptyState from "@/components/common/EmptyState";
@@ -22,7 +22,12 @@ export default function ChatPage() {
   const [chatError, setChatError] = useState("");
   const [response, setResponse] = useState<ChatResponse | null>(null);
 
+  const answerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
+    if (response && answerRef.current) {
+      answerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
     async function loadCities() {
       try {
         setCitiesError("");
@@ -38,7 +43,7 @@ export default function ChatPage() {
     }
 
     loadCities();
-  }, []);
+  }, [response]);
 
   async function handleAsk() {
     setChatError("");
@@ -119,7 +124,9 @@ export default function ChatPage() {
 
       {response ? (
         <div className="mt-6 space-y-4">
-          <AnswerCard answer={response.answer} />
+          <div ref={answerRef}>
+            <AnswerCard answer={response.answer} />
+          </div>
           <CitationList citations={response.citations} />
         </div>
       ) : null}

@@ -9,6 +9,7 @@ import Loader from "@/components/common/Loader";
 import { getAllCities, getDocuments, getJobs, runNextJob } from "@/lib/api";
 import { getAdminToken } from "@/lib/auth";
 import type { City, Document, ProcessingJob } from "@/lib/types";
+import toast from "react-hot-toast";
 
 export default function AdminJobsPage() {
   const [cities, setCities] = useState<City[]>([]);
@@ -45,7 +46,7 @@ export default function AdminJobsPage() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to load jobs page";
-      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -72,12 +73,12 @@ export default function AdminJobsPage() {
       setSuccess("");
 
       await runNextJob(token);
-      setSuccess("Next queued job processed successfully.");
+      toast.success("Next queued job processed successfully.");
       await loadPageData();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to run next queued job";
-      setError(message);
+      toast.error(message);
     } finally {
       setRunningNext(false);
     }

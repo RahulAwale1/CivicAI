@@ -7,6 +7,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import DocumentTable from "@/components/admin/DocumentTable";
 import DocumentUploadForm from "@/components/admin/DocumentUploadForm";
 import Loader from "@/components/common/Loader";
+import toast from "react-hot-toast";
 import {
   createProcessingJobs,
   getAllCities,
@@ -50,7 +51,7 @@ export default function AdminDocumentsPage() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to load documents page";
-      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -93,13 +94,13 @@ export default function AdminDocumentsPage() {
       setSuccess("");
 
       await uploadDocument(token, formData);
-      setSuccess("Document uploaded successfully.");
+      toast.success("Document uploaded successfully.");
       setSelectedDocumentIds([]);
       await loadPageData();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to upload document";
-      setError(message);
+      toast.error(message);
     } finally {
       setUploading(false);
     }
@@ -115,13 +116,13 @@ export default function AdminDocumentsPage() {
       setSuccess("");
 
       await createProcessingJobs(token, selectedDocumentIds);
-      setSuccess("Processing jobs created successfully.");
+      toast.success("Processing jobs created successfully.");
       setSelectedDocumentIds([]);
       await loadPageData();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to create processing jobs";
-      setError(message);
+      toast.error(message);
     } finally {
       setProcessing(false);
     }
