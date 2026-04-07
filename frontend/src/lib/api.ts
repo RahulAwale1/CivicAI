@@ -131,7 +131,7 @@ export async function deactivateCity(token: string, cityId: number) {
 export async function getDocuments(token: string, cityId?: number) {
   const path = cityId
     ? `/admin/documents?city_id=${cityId}`
-    : "/admin/documents";
+    : "/admin/documents/";
   return adminApiFetch<Document[]>(path, token);
 }
 
@@ -172,7 +172,7 @@ export async function getJobs(
   }
 
   const query = params.toString();
-  const path = query ? `/admin/jobs?${query}` : "/admin/jobs";
+  const path = query ? `/admin/jobs?${query}` : "/admin/jobs/";
 
   return adminApiFetch<ProcessingJob[]>(path, token);
 }
