@@ -43,6 +43,16 @@ class S3Service:
         self.client.download_fileobj(self.bucket_name, s3_key, buffer)
         buffer.seek(0)
         return buffer.read()
+    
+    def generate_presigned_url(self, s3_key: str, expires_in: int = 3600) -> str:
+        return self.client.generate_presigned_url(
+            "get_object",
+            Params={
+                "Bucket": self.bucket_name,
+                "Key": s3_key,
+            },
+            ExpiresIn=expires_in,
+    )
 
 
 s3_service = S3Service()

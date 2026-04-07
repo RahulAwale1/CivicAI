@@ -180,3 +180,9 @@ export async function runNextJob(token: string) {
     method: "POST",
   });
 }
+
+export async function getDocumentLink(documentId: number) {
+  return apiFetch<{ document_id: number; title: string; url: string }>(
+    `/documents/${documentId}/link`
+  );
+}
