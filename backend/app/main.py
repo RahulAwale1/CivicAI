@@ -11,6 +11,7 @@ from app.api.routes.auth import router as auth_router
 from app.api.routes.chat import router as chat_router
 from app.api.routes.cities import router as cities_router
 from app.api.routes.health import router as health_router
+from app.api.routes.admin_dashboard import router as admin_dashboard_router
 from app.core.config import settings
 from app.db.database import Base, engine
 from app.db.models import Admin, City, Chunk, Document, ProcessingJob  # noqa: F401
@@ -40,6 +41,7 @@ app.include_router(admin_jobs_router)
 app.include_router(admin_processing_router)
 app.include_router(chat_router)
 app.include_router(document_links_router)
+app.include_router(admin_dashboard_router)
 
 
 @app.get("/")

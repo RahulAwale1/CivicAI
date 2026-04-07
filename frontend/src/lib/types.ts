@@ -53,3 +53,25 @@ export type LoginResponse = {
   access_token: string;
   token_type: string;
 };
+
+export type DashboardStats = {
+  cities: {
+    total: number;
+    active: number;
+  };
+  documents: {
+    total: number;
+    uploaded: number;
+    queued: number;
+    processing: number;
+    processed: number;
+    failed: number;
+  };
+  jobs: {
+    total: number;
+    queued: number;
+    running: number;
+    completed: number;
+    failed: number;
+  };
+};

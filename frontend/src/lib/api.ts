@@ -5,7 +5,9 @@ import type {
   Document,
   LoginResponse,
   ProcessingJob,
+  DashboardStats,
 } from "@/lib/types";
+
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
@@ -185,4 +187,8 @@ export async function getDocumentLink(documentId: number) {
   return apiFetch<{ document_id: number; title: string; url: string }>(
     `/documents/${documentId}/link`
   );
+}
+
+export async function getDashboardStats(token: string) {
+  return adminApiFetch<DashboardStats>("/admin/dashboard/stats", token);
 }
