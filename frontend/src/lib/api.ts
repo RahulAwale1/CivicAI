@@ -136,7 +136,7 @@ export async function getDocuments(token: string, cityId?: number) {
 }
 
 export async function uploadDocument(token: string, formData: FormData) {
-  const response = await fetch(`${API_BASE_URL}/admin/documents/upload`, {
+  const response = await fetch(`${API_BASE_URL}/admin/documents/upload/`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
