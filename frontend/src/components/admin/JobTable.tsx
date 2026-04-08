@@ -1,35 +1,34 @@
 "use client";
 
 import StatusBadge from "@/components/admin/StatusBadge";
-import type { City, Document } from "@/lib/types";
+import type { City, ProcessingJob, Document } from "@/lib/types";
 
-type DocumentTableProps = {
-  documents: Document[];
+type JobTableProps = {
+  jobs: ProcessingJob[];
   cities: City[];
-  selectedDocumentIds: number[];
-  onToggleSelect: (documentId: number) => void;
-  onToggleSelectAll: (checked: boolean) => void;
+  documents?: Document[];
 };
 
-export default function DocumentTable({
-  documents,
+export default function JobTable({
+  jobs,
   cities,
-  selectedDocumentIds,
-  onToggleSelect,
-  onToggleSelectAll,
-}: DocumentTableProps) {
-  const allSelected =
-    documents.length > 0 &&
-    documents.every((doc) => selectedDocumentIds.includes(doc.id));
-
+  documents = [],
+}: JobTableProps) {
   function getCityName(cityId: number) {
     return cities.find((city) => city.id === cityId)?.name || `City ${cityId}`;
   }
 
-  if (!documents.length) {
+  function getDocumentTitle(documentId: number) {
+    return (
+      documents.find((document) => document.id === documentId)?.title ||
+      `Document ${documentId}`
+    );
+  }
+
+  if (!jobs.length) {
     return (
       <div className="rounded-xl border border-dashed border-gray-300 p-6 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-        No documents uploaded yet. Upload your first PDF to get started.
+        No processing jobs found.
       </div>
     );
   }
@@ -39,53 +38,52 @@ export default function DocumentTable({
       <table className="min-w-full text-left text-sm">
         <thead className="border-b border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300">
           <tr>
-            <th className="px-4 py-3">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={(e) => onToggleSelectAll(e.target.checked)}
-              />
-            </th>
-            <th className="px-4 py-3 font-medium">Title</th>
-            <th className="px-4 py-3 font-medium">File</th>
+            <th className="px-4 py-3 font-medium">Job ID</th>
+            <th className="px-4 py-3 font-medium">Document</th>
             <th className="px-4 py-3 font-medium">City</th>
             <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Uploaded</th>
+            <th className="px-4 py-3 font-medium">Started</th>
+            <th className="px-4 py-3 font-medium">Completed</th>
+            <th className="px-4 py-3 font-medium">Error</th>
           </tr>
         </thead>
 
         <tbody>
-          {documents.map((document) => (
+          {jobs.map((job) => (
             <tr
-              key={document.id}
+              key={job.id}
               className="border-b border-gray-200 last:border-b-0 dark:border-gray-800"
             >
-              <td className="px-4 py-3">
-                <input
-                  type="checkbox"
-                  checked={selectedDocumentIds.includes(document.id)}
-                  onChange={() => onToggleSelect(document.id)}
-                />
-              </td>
-
               <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                {document.title}
+                {job.id}
               </td>
 
               <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                {document.original_filename}
+                {getDocumentTitle(job.document_id)}
               </td>
 
               <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                {getCityName(document.city_id)}
+                {getCityName(job.city_id)}
               </td>
 
               <td className="px-4 py-3">
-                <StatusBadge status={document.status} />
+                <StatusBadge status={job.status} />
               </td>
 
               <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                {new Date(document.uploaded_at).toLocaleString()}
+                {job.started_at
+                  ? new Date(job.started_at).toLocaleString()
+                  : "—"}
+              </td>
+
+              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                {job.completed_at
+                  ? new Date(job.completed_at).toLocaleString()
+                  : "—"}
+              </td>
+
+              <td className="max-w-xs px-4 py-3 text-gray-600 dark:text-gray-400">
+                <span className="line-clamp-2">{job.error_message || "—"}</span>
               </td>
             </tr>
           ))}
