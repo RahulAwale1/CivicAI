@@ -25,7 +25,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://your-frontend-domain.com",
+        "https://civic-ai-woad.vercel.app",
+        "https://api.rahulawale.com",
+        "https://civicai.rahulawale.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
