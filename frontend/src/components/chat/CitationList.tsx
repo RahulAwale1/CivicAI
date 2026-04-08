@@ -66,10 +66,12 @@ export default function CitationList({ citations }: CitationListProps) {
 
   return (
     <div className="mt-4">
-      <h3 className="mb-2 text-sm font-semibold text-gray-800">Sources</h3>
+      <h3 className="mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
+        Sources
+      </h3>
 
       {error ? (
-        <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
           {error}
         </div>
       ) : null}
@@ -78,12 +80,14 @@ export default function CitationList({ citations }: CitationListProps) {
         {groupedCitations.map((citation) => (
           <div
             key={citation.document_id}
-            className="rounded-lg border bg-gray-50 px-4 py-3"
+            className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-800 dark:bg-gray-900"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="font-medium text-gray-900">{citation.title}</div>
-                <div className="text-sm text-gray-600">
+                <div className="font-medium text-gray-900 dark:text-gray-100">
+                  {citation.title}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   {citation.pages.length
                     ? `Pages ${citation.pages.join(", ")}`
                     : "Page information unavailable"}
@@ -93,7 +97,7 @@ export default function CitationList({ citations }: CitationListProps) {
               <button
                 onClick={() => handleOpenPdf(citation.document_id)}
                 disabled={loadingDocId === citation.document_id}
-                className="rounded-lg border px-3 py-2 text-sm text-gray-700 hover:bg-white disabled:opacity-60"
+                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-white disabled:opacity-60 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
               >
                 {loadingDocId === citation.document_id ? "Opening..." : "Open PDF"}
               </button>

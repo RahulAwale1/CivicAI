@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import PageTitle from "@/components/common/PageTitle";
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import { loginAdmin } from "@/lib/api";
 import { getAdminToken, setAdminToken } from "@/lib/auth";
 import toast from "react-hot-toast";
@@ -44,15 +45,24 @@ export default function AdminLoginPage() {
 
   return (
     <main className="mx-auto max-w-md px-6 py-16">
+      <div className="mb-4 flex justify-end">
+        <ThemeToggle />
+      </div>
+
       <PageTitle
         title="Admin Login"
         subtitle="Sign in to manage cities, documents, and processing jobs."
       />
 
-      <form onSubmit={handleSubmit} className="rounded-xl border bg-white p-6 shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+      >
         <div className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium">Email</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Email
+            </label>
             <Input
               type="email"
               placeholder="admin@civicai.com"
@@ -63,7 +73,9 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Password</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Password
+            </label>
             <Input
               type="password"
               placeholder="Enter password"
@@ -74,7 +86,7 @@ export default function AdminLoginPage() {
           </div>
 
           {error ? (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
               {error}
             </div>
           ) : null}

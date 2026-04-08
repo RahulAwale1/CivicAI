@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
-import type { City } from "@/lib/types";
 
 type CityFormValues = {
   name: string;
@@ -30,9 +29,7 @@ export default function CityForm({
   const [name, setName] = useState(initialValues?.name || "");
   const [slug, setSlug] = useState(initialValues?.slug || "");
   const [province, setProvince] = useState(initialValues?.province || "");
-  const [isActive, setIsActive] = useState(
-    initialValues?.is_active ?? true
-  );
+  const [isActive, setIsActive] = useState(initialValues?.is_active ?? true);
 
   useEffect(() => {
     setName(initialValues?.name || "");
@@ -64,7 +61,7 @@ export default function CityForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Name
         </label>
         <Input
@@ -76,7 +73,7 @@ export default function CityForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Slug
         </label>
         <Input
@@ -88,7 +85,7 @@ export default function CityForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Province
         </label>
         <Input
@@ -99,7 +96,7 @@ export default function CityForm({
         />
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-gray-700">
+      <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
         <input
           type="checkbox"
           checked={isActive}
@@ -117,7 +114,7 @@ export default function CityForm({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border px-4 py-2 text-sm text-gray-700"
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             Cancel
           </button>

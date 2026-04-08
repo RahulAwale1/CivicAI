@@ -44,7 +44,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminRouteGuard>
-      <div className="flex min-h-screen bg-gray-50">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
         <AdminSidebar />
 
         <main className="flex-1 p-8">
@@ -53,8 +53,8 @@ export default function AdminDashboardPage() {
             subtitle="Overview of CivicAI administration."
           />
 
-          <div className="mb-6 rounded-xl border bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-600">
+          <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Signed in as <span className="font-medium">{admin?.email}</span>
             </p>
           </div>
@@ -62,13 +62,13 @@ export default function AdminDashboardPage() {
           {loading ? (
             <Loader />
           ) : error ? (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
               {error}
             </div>
           ) : stats ? (
             <div className="space-y-8">
               <section>
-                <h2 className="mb-3 text-lg font-semibold text-gray-900">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Cities
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -78,7 +78,7 @@ export default function AdminDashboardPage() {
               </section>
 
               <section>
-                <h2 className="mb-3 text-lg font-semibold text-gray-900">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Documents
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
               </section>
 
               <section>
-                <h2 className="mb-3 text-lg font-semibold text-gray-900">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Jobs
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">

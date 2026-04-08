@@ -49,13 +49,13 @@ export default function DocumentUploadForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           City
         </label>
         <select
           value={cityId}
           onChange={(e) => setCityId(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
           required
         >
           <option value="">Select a city</option>
@@ -70,7 +70,7 @@ export default function DocumentUploadForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Title
         </label>
         <Input
@@ -82,7 +82,7 @@ export default function DocumentUploadForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
           PDF File
         </label>
         <input
@@ -90,7 +90,7 @@ export default function DocumentUploadForm({
           type="file"
           accept="application/pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="block w-full text-sm text-gray-700"
+          className="block w-full text-sm text-gray-700 dark:text-gray-300"
           required
         />
       </div>
