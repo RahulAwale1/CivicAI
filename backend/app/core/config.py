@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     ocr_enabled: bool = True
     ocr_min_text_length: int = 100
 
+    redis_url: str
+    celery_broker_url: str
+    celery_result_backend: str
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8"

@@ -6,7 +6,13 @@ import AdminRouteGuard from "@/components/admin/AdminRouteGuard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import JobTable from "@/components/admin/JobTable";
 import Loader from "@/components/common/Loader";
-import { getAllCities, getDocuments, getJobs, runNextJob } from "@/lib/api";
+import {
+  getAllCities,
+  getDocuments,
+  getJobs,
+  runAllJobs,
+  runNextJob,
+} from "@/lib/api";
 import { getAdminToken } from "@/lib/auth";
 import type { City, Document, ProcessingJob } from "@/lib/types";
 import toast from "react-hot-toast";
@@ -20,6 +26,7 @@ export default function AdminJobsPage() {
 
   const [loading, setLoading] = useState(true);
   const [runningNext, setRunningNext] = useState(false);
+  const [runningAll, setRunningAll] = useState(false);
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -54,6 +61,12 @@ export default function AdminJobsPage() {
 
   useEffect(() => {
     loadPageData();
+
+    const interval = setInterval(() => {
+      loadPageData();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const filteredJobs = useMemo(() => {
@@ -72,8 +85,8 @@ export default function AdminJobsPage() {
       setError("");
       setSuccess("");
 
-      await runNextJob(token);
-      toast.success("Next queued job processed successfully.");
+      const result = await runNextJob(token);
+      toast.success(result.message);
       await loadPageData();
     } catch (err) {
       const message =
@@ -81,6 +94,27 @@ export default function AdminJobsPage() {
       toast.error(message);
     } finally {
       setRunningNext(false);
+    }
+  }
+
+  async function handleRunAll() {
+    const token = getAdminToken();
+    if (!token) return;
+
+    try {
+      setRunningAll(true);
+      setError("");
+      setSuccess("");
+
+      const result = await runAllJobs(token);
+      toast.success(result.message);
+      await loadPageData();
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to run all queued jobs";
+      toast.error(message);
+    } finally {
+      setRunningAll(false);
     }
   }
 
@@ -128,6 +162,14 @@ export default function AdminJobsPage() {
                   className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {runningNext ? "Running..." : "Run Next Queued Job"}
+                </button>
+
+                <button
+                  onClick={handleRunAll}
+                  disabled={runningAll || queuedCount === 0}
+                  className="rounded-lg border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60 dark:text-blue-300 dark:hover:bg-blue-950"
+                >
+                  {runningAll ? "Queueing..." : "Run All Queued Jobs"}
                 </button>
               </div>
             </div>

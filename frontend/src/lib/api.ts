@@ -178,9 +178,13 @@ export async function getJobs(
 }
 
 export async function runNextJob(token: string) {
-  return adminApiFetch<ProcessingJob>("/admin/processing/run-next", token, {
-    method: "POST",
-  });
+  return adminApiFetch<{ message: string; job_id: number }>(
+    "/admin/processing/run-next",
+    token,
+    {
+      method: "POST",
+    }
+  );
 }
 
 export async function getDocumentLink(documentId: number) {
@@ -191,4 +195,14 @@ export async function getDocumentLink(documentId: number) {
 
 export async function getDashboardStats(token: string) {
   return adminApiFetch<DashboardStats>("/admin/dashboard/stats", token);
+}
+
+export async function runAllJobs(token: string) {
+  return adminApiFetch<{ message: string; job_ids: number[]; count: number }>(
+    "/admin/processing/run-all",
+    token,
+    {
+      method: "POST",
+    }
+  );
 }

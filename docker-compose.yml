@@ -17,6 +17,13 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: civicai-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -24,12 +31,30 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - ./backend/.env
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+    container_name: civicai-worker
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    command: celery -A app.core.celery_app.celery_app worker --loglevel=info
     restart: unless-stopped
 
 volumes:
